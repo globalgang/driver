@@ -1,1 +1,0 @@
-cmd_drivers/net/wireless/atmel/at_pwr_dev/at_pwr_dev.ko := arm-linux-gnueabi-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/net/wireless/atmel/at_pwr_dev/at_pwr_dev.ko drivers/net/wireless/atmel/at_pwr_dev/at_pwr_dev.o drivers/net/wireless/atmel/at_pwr_dev/at_pwr_dev.mod.o
