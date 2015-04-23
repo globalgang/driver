@@ -1,0 +1,1 @@
+cmd_drivers/net/wireless/atmel/wilc3000/wilc3000.ko := arm-linux-gnueabi-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/net/wireless/atmel/wilc3000/wilc3000.ko drivers/net/wireless/atmel/wilc3000/wilc3000.o drivers/net/wireless/atmel/wilc3000/wilc3000.mod.o

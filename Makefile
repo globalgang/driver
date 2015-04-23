@@ -1,0 +1,2 @@
+obj-$(CONFIG_ATMEL_SMARTCONNECT)		+= at_pwr_dev/
+obj-$(CONFIG_ATMEL_SMARTCONNECT)		+= wilc3000/
