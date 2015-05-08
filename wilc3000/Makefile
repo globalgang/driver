@@ -6,7 +6,6 @@ WILC3000_P2P_FIRMWARE = P2P_CONCURRENCY_FIRMWARE=\"wifi_firmware_p2p_concurrency
 WILC3000_BT_FIRMWARE = BT_FIRMWARE=\"bt_firmware.bin\"
 
 TOP := $(dir $(lastword $(MAKEFILE_LIST)))
-ccflags-y += -I $(TOP)/ -I $(TOP)/../at_pwr_dev/
 
 ccflags-y += -D$(WILC3000_STA_FW_VERSION)
 ccflags-y += -D$(WILC3000_AP_FW_VERSION)
@@ -39,6 +38,15 @@ ccflags-$(CONFIG_WILC3000_ENABLE_DEBUGFS) += -DATWILC_DEBUGFS
 
 ccflags-y += -DATWILC_ASIC_A0 -DCONNECT_DIRECT -DATWILC_PARSE_SCAN_IN_HOST -DAGING_ALG -DDISABLE_PWRSAVE_AND_SCAN_DURING_IP \
 			-DATL_PLATFORM=ATL_LINUXKERNEL -Wno-unused-function -DUSE_WIRELESS -DATWILC_BT_COEXISTENCE -DDOWNLOAD_BT_FW\ 
+
+wilc3000-y += at_pwr_dev_main.o
+wilc3000-y += atwilc_debugfs.o
+wilc3000-y += atwilc_queue.o
+wilc3000-y += atwilc_sdio.o
+wilc3000-y += atwilc_spi.o
+wilc3000-y += linux_os_wrapper.o
+wilc3000-$(CONFIG_WILC3000_SDIO) += linux_wlan_sdio.o
+wilc3000-$(CONFIG_WILC3000_SPI) += linux_wlan_spi.o
 
 wilc3000-y += atl_memory.o
 wilc3000-y += atl_msg_queue.o

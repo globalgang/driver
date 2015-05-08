@@ -591,6 +591,7 @@ static void linux_wlan_mac_indicate(int flag){
 	*/
 	linux_wlan_t *pd = g_linux_wlan;
 	int status;
+	
 	if (flag == ATWILC_MAC_INDICATE_STATUS) {		
 		pd->oup.wlan_cfg_get_value(WID_STATUS, (unsigned char*)&status, 4);
 		if (pd->mac_status == ATWILC_MAC_STATUS_INIT) {
@@ -2522,11 +2523,8 @@ int mac_ioctl(struct net_device *ndev, struct ifreq *req, int cmd){
 				s32Error = -EFAULT;
 				goto done;
 			}
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)  //jude strncasecmp
-			if(strncasecmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {
-#else
-			if(strnicmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {
-#endif
+
+			if(strnicmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {						
 				uint32_t mode = *(buff + strlen("BTCOEXMODE") + 1) - '0';
 		        #ifdef ATWILC_BT_COEXISTENCE
 				PRINT_D(GENERIC_DBG, "[COEX] [DRV] rcvd IO ctrl << BT-MODE: %d >>\n",mode);
@@ -2563,11 +2561,7 @@ int mac_ioctl(struct net_device *ndev, struct ifreq *req, int cmd){
 
 				printk("IOCTRL priv: %s", buff);
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)  //jude strncasecmp
-				if(strncasecmp(buff,"RSSI",size) == 0)
-#else
-				if(strnicmp(buff,"RSSI",size) == 0)
-#endif
+				if(strnicmp(buff,"RSSI",size) == 0) 
 				{
 				#ifdef ATWILC_BT_COEXISTENCE
 					//AA need another way to get bluetooth state (on/off)
@@ -2600,28 +2594,8 @@ int mac_ioctl(struct net_device *ndev, struct ifreq *req, int cmd){
 						s32Error = -EFAULT;
 						goto done;
 					}
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)  //jude strncasecmp
-					}else if(strncasecmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {
-			        	uint32_t mode = *(buff + strlen("BTCOEXMODE") + 1) - '0';
-					#ifdef ATWILC_BT_COEXISTENCE
-						printk("[COEX] [DRV] rcvd IO ctrl << BT-MODE: %d >>\n",mode);
-						if(mode != 1 && mode != 0)
-						{
-							host_int_change_bt_coex_mode(priv->hATWILCWFIDrv,mode);
-						}
-					#endif
-			        }else if(strncasecmp(buff, "BTCOEXSCAN-START", strlen("BTCOEXSCAN-START")) == 0) {
-						#ifdef ATWILC_BT_COEXISTENCE
-						printk("[COEX] [DRV] rcvd IO ctrl << BTCOEXSCAN-START >>\n");
-						#endif
-			        }else if(strncasecmp(buff, "BTCOEXSCAN-STOP", strlen("BTCOEXSCAN-STOP")) == 0) {
-						#ifdef ATWILC_BT_COEXISTENCE
-						printk("[COEX] [DRV] rcvd IO ctrl << BTCOEXSCAN-STOP >>\n");
-						#endif
-			        }
-#else
-			        }else if(strnicmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {
-			        	uint32_t mode = *(buff + strlen("BTCOEXMODE") + 1) - '0';
+			        }else if(strnicmp(buff, "BTCOEXMODE", strlen("BTCOEXMODE")) == 0) {						
+						uint32_t mode = *(buff + strlen("BTCOEXMODE") + 1) - '0';
 				    #ifdef ATWILC_BT_COEXISTENCE
 						printk("[COEX] [DRV] rcvd IO ctrl << BT-MODE: %d >>\n",mode);
 						if(mode != 1 && mode != 0)
@@ -2629,7 +2603,7 @@ int mac_ioctl(struct net_device *ndev, struct ifreq *req, int cmd){
 							host_int_change_bt_coex_mode(priv->hATWILCWFIDrv,mode);
 						}
 					#endif			        		
-			        }else if(strnicmp(buff, "BTCOEXSCAN-START", strlen("BTCOEXSCAN-START")) == 0) {
+			        }else if(strnicmp(buff, "BTCOEXSCAN-START", strlen("BTCOEXSCAN-START")) == 0) {						
 						#ifdef ATWILC_BT_COEXISTENCE
 						printk("[COEX] [DRV] rcvd IO ctrl << BTCOEXSCAN-START >>\n");
 						#endif
@@ -2638,8 +2612,6 @@ int mac_ioctl(struct net_device *ndev, struct ifreq *req, int cmd){
 						printk("[COEX] [DRV] rcvd IO ctrl << BTCOEXSCAN-STOP >>\n");
 						#endif
 			        }
-#endif
-
 			}
 		}
 		break;
@@ -2912,6 +2884,10 @@ int atwilc_netdev_init(void){
 /*The 1st function called after module inserted*/
 static int __init init_atwilc_driver(void){
 	int ret = 0;
+	if(at_pwr_dev_init() != 0)
+	{
+		ATL_PRINTF("Failed to create bluetooth power device\n");
+	}
 
 #if defined (ATWILC_DEBUGFS)
 	if(atwilc_debugfs_init() < 0) {	
@@ -3026,7 +3002,9 @@ static void __exit exit_atwilc_driver(void)
 	#if defined (ATWILC_DEBUGFS)
 		atwilc_debugfs_remove();
 	#endif
+	at_pwr_dev_deinit();
 	at_pwr_power_down(PWR_DEV_SRC_WIFI);
+
 }
 module_exit(exit_atwilc_driver);
 

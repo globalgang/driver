@@ -23,7 +23,7 @@
 #elif defined (PLAT_ALLWINNER_A31)
 #define MAX_SPEED 50000000
 #elif defined (PLAT_SAMA5D4)
-#define MAX_SPEED 6000000 // 6000000
+#define MAX_SPEED 40000000 // 6000000
 #else
 #define MAX_SPEED 50000000
 #endif

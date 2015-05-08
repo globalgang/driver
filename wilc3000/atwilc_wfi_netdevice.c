@@ -962,8 +962,8 @@ int ATWILC_WFI_InitModule(void)
 
 }
  
- 
+
 module_init(ATWILC_WFI_InitModule);
 module_exit(ATWILC_WFI_Cleanup);
- 
+
 #endif

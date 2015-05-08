@@ -156,7 +156,7 @@ typedef struct {
 *	@date		4 Dec 2014
 *	@version	1.0
 */
-//int at_pwr_dev_init(void);
+int at_pwr_dev_init(void);
 
 /*!
 *	@brief		Deinitialize bluetooth power device
@@ -166,7 +166,7 @@ typedef struct {
 *	@date		4 Dec 2014
 *	@version	1.0
 */
-//int at_pwr_dev_deinit(void);
+int at_pwr_dev_deinit(void);
 
 /*!
 *	@brief		Register bus

@@ -141,7 +141,7 @@ CHIP_PS_STATE_T genuChipPSstateFromWifi;
 /*								Public Functions							 */
 /*****************************************************************************/
 
-static int __init  at_pwr_dev_init(void) /* Constructor */
+int at_pwr_dev_init(void) /* Constructor */
 {
 	int ret =0;
 	
@@ -186,7 +186,7 @@ static int __init  at_pwr_dev_init(void) /* Constructor */
 	return ret;
 }
 
-static void __exit at_pwr_dev_deinit(void) /* Destructor */
+int at_pwr_dev_deinit(void) /* Destructor */
 {
 	printk("@@@@@@@@@@@@@@@@@@@@@@@ at_pwr_dev: deinit\n");
 
@@ -1157,10 +1157,6 @@ static int atwilc_bt_start(void)
 	
 	return (ret<0)?ret:0;
 }
-
-
-module_init(at_pwr_dev_init);
-module_exit(at_pwr_dev_deinit);
 
 EXPORT_SYMBOL(linux_wlan_init_spin_lock);
 EXPORT_SYMBOL(genuChipPSstate);

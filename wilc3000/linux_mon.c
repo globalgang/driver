@@ -420,7 +420,6 @@ static netdev_tx_t ATWILC_WFI_mon_xmit(struct sk_buff *skb,
 	#elif USE_WIRELESS
 	//Identify if Ethernet or MAC header (data or mgmt)
 	memcpy(srcAdd,& skb->data[10],6);
-	//ATL_PRINTF("SRC/BSSID\n");
 	memcpy(bssid, &skb->data[16],6);
 	//if source address and bssid fields are equal>>Mac header
 	/*send it to mgmt frames handler */
